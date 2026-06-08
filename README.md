@@ -1,8 +1,8 @@
 # TicketHub
 
-Backend aplikacija za prodaju i rezervaciju ulaznica.
+Backend app for selling & buying tickets.
 
-## Tehnologije
+## Technologies
 
 - Java 21
 - Spring Boot
@@ -10,8 +10,8 @@ Backend aplikacija za prodaju i rezervaciju ulaznica.
 - Maven
 - JPA/Hibernate
 
-## Pokretanje
+## Run
 
-1. Kreirati bazu tickethub
-2. Podesiti application.properties
-3. Pokrenuti TicketHubApplication
+1. Create a base tickethub
+2. Configure application.properties
+3. Run TicketHubApplication
