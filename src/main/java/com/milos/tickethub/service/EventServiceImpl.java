@@ -27,8 +27,18 @@ public class EventServiceImpl implements EventService{
         return eventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
     }
+
     @Override
     public Event updateEvent(Long id, Event event){
+        event.setId(id);
         return eventRepository.save(event);
+    }
+
+    @Override
+    public String deleteEvent(Long id){
+        try{
+            eventRepository.deleteById(id);
+        } catch(Exception e){ return "Event not found or incorrect ID has been given " + e.getMessage(); }
+        return "Event deleted successfully";
     }
 }

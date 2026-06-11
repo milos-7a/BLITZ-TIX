@@ -8,4 +8,5 @@ public interface EventService {
     Event createEvent(Event event);
     Event getEventById(Long id);
     Event updateEvent(Long id, Event event);
+    String deleteEvent(Long id);
 }
