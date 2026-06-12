@@ -1,6 +1,7 @@
 package com.milos.tickethub.service;
 
 import com.milos.tickethub.entity.Event;
+import com.milos.tickethub.exception.EventNotFoundException;
 import com.milos.tickethub.repository.EventRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class EventServiceImpl implements EventService{
     @Override
     public Event getEventById(Long id){
         return eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new EventNotFoundException(id));
     }
 
     @Override
@@ -36,9 +37,8 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public String deleteEvent(Long id){
-        try{
-            eventRepository.deleteById(id);
-        } catch(Exception e){ return "Event not found or incorrect ID has been given " + e.getMessage(); }
+        eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+        eventRepository.deleteById(id);
         return "Event deleted successfully";
     }
 }
