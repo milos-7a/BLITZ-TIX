@@ -1,5 +1,6 @@
 package com.milos.tickethub.controller;
 
+import com.milos.tickethub.dto.LoginRequest;
 import com.milos.tickethub.dto.RegisterRequest;
 import com.milos.tickethub.dto.UserResponse;
 import com.milos.tickethub.entity.User;
@@ -17,7 +18,10 @@ public class UserController {
 
     @PostMapping("/register")
     public UserResponse registerUser(@Valid @RequestBody RegisterRequest request) {
-        User user = userService.registerUser(request);
-        return UserMapper.toResponse(user);
+        return userService.registerUser(request);
+    }
+    @PostMapping("/login")
+    public UserResponse loginUser(@Valid @RequestBody LoginRequest request) {
+        return userService.loginUser(request);
     }
 }
