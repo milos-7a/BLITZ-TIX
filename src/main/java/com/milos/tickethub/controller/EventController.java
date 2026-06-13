@@ -5,6 +5,7 @@ import com.milos.tickethub.dto.EventResponse;
 import com.milos.tickethub.entity.Event;
 import com.milos.tickethub.mapper.EventMapper;
 import com.milos.tickethub.service.EventService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class EventController {
     }
 
     @PostMapping
-    public EventResponse createEvent(@RequestBody EventRequest request) {
+    public EventResponse createEvent(@Valid @RequestBody EventRequest request) {
         Event event = EventMapper.toEntity(request);
         Event saved = eventService.createEvent(event);
         return EventMapper.toResponse(saved);
@@ -38,7 +39,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public EventResponse updateEvent(@PathVariable Long id, @RequestBody EventRequest request){
+    public EventResponse updateEvent(@PathVariable Long id, @Valid @RequestBody EventRequest request){
         Event event = EventMapper.toEntity(request);
         Event saved = eventService.updateEvent(id, event);
         return EventMapper.toResponse(saved);

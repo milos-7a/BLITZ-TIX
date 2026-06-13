@@ -1,8 +1,12 @@
 package com.milos.tickethub.service;
 
+import com.milos.tickethub.dto.RegisterRequest;
 import com.milos.tickethub.entity.User;
+import com.milos.tickethub.exception.EmailAlreadyExistsException;
+import com.milos.tickethub.mapper.UserMapper;
 import com.milos.tickethub.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers(){
@@ -18,7 +23,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User registerUser(User user){
-        return userRepository.save(user); //changes needed
+    public User registerUser(RegisterRequest request){
+        if (userRepository.existsByEmail(request.email())){
+            throw new EmailAlreadyExistsException(request.email());
+        }
+        User user = UserMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.password()));
+        User savedUser = userRepository.save(user);
+        return savedUser;
     }
 }
