@@ -4,8 +4,6 @@ import com.milos.tickethub.dto.LoginRequest;
 import com.milos.tickethub.dto.LoginResponse;
 import com.milos.tickethub.dto.RegisterRequest;
 import com.milos.tickethub.dto.UserResponse;
-import com.milos.tickethub.entity.User;
-import com.milos.tickethub.mapper.UserMapper;
 import com.milos.tickethub.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
