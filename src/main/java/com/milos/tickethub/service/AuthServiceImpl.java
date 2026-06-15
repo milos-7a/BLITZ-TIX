@@ -1,7 +1,6 @@
 package com.milos.tickethub.service;
 
 import com.milos.tickethub.dto.LoginRequest;
-import com.milos.tickethub.dto.LoginResponse;
 import com.milos.tickethub.dto.RegisterRequest;
 import com.milos.tickethub.dto.UserResponse;
 import com.milos.tickethub.entity.User;
@@ -10,13 +9,17 @@ import com.milos.tickethub.mapper.UserMapper;
 import com.milos.tickethub.repository.UserRepository;
 import com.milos.tickethub.security.JwtUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService{
+public class AuthServiceImpl implements AuthService {
+    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -33,13 +36,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public LoginResponse loginUser(LoginRequest request){
-        User user = userRepository.findByEmail(request.email()).orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
-        if (!passwordEncoder.matches(request.password(), user.getPassword())){
-            throw new BadCredentialsException("Invalid credentials");
-        }
-        String token = jwtUtil.generateToken(request.email());
-        UserResponse userResponse = UserMapper.toResponse(user);
-        return new LoginResponse(token, userResponse);
+    public String loginUser(LoginRequest request){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+        assert user != null;
+        return jwtUtil.generateToken(user.getUsername());
     }
 }

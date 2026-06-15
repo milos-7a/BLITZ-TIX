@@ -1,26 +1,25 @@
 package com.milos.tickethub.controller;
 
 import com.milos.tickethub.dto.LoginRequest;
-import com.milos.tickethub.dto.LoginResponse;
 import com.milos.tickethub.dto.RegisterRequest;
 import com.milos.tickethub.dto.UserResponse;
-import com.milos.tickethub.service.UserService;
+import com.milos.tickethub.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class UserController {
-    private final UserService userService;
+public class AuthController {
+    private final AuthService authService;
 
     @PostMapping("/register")
     public UserResponse registerUser(@Valid @RequestBody RegisterRequest request) {
-        return userService.registerUser(request);
+        return authService.registerUser(request);
     }
     @PostMapping("/login")
-    public LoginResponse loginUser(@Valid @RequestBody LoginRequest request) {
-        return userService.loginUser(request);
+    public String loginUser(@Valid @RequestBody LoginRequest request) {
+        return authService.loginUser(request);
     }
 }
