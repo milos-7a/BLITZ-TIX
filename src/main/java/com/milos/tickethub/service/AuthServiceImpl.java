@@ -3,6 +3,7 @@ package com.milos.tickethub.service;
 import com.milos.tickethub.dto.LoginRequest;
 import com.milos.tickethub.dto.RegisterRequest;
 import com.milos.tickethub.dto.UserResponse;
+import com.milos.tickethub.entity.Role;
 import com.milos.tickethub.entity.User;
 import com.milos.tickethub.exception.EmailAlreadyExistsException;
 import com.milos.tickethub.mapper.UserMapper;
@@ -15,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailAlreadyExistsException(request.email());
         }
         User user = UserMapper.toEntity(request);
+        user.setRoles(Set.of(Role.USER));
         user.setPassword(passwordEncoder.encode(request.password()));
         User savedUser = userRepository.save(user);
         return UserMapper.toResponse(savedUser);
