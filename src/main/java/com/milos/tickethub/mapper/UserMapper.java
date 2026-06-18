@@ -10,7 +10,8 @@ public class UserMapper {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRoles()
         );
     }
     public static User toEntity(RegisterRequest request) {

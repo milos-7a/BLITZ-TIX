@@ -54,6 +54,8 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/api/auth/**", "/api/test/all").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/events/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/events/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 );
         // Add the JWT Token filter before the UsernamePasswordAuthenticationFilter
