@@ -3,6 +3,7 @@ package com.milos.tickethub.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,5 +22,8 @@ public class Event {
     private String description;
     private String location;
     private LocalDateTime dateTime;
+    private BigDecimal price;
+    private Integer capacity;
+    private Integer soldTickets;
 
 }

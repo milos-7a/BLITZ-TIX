@@ -1,5 +1,6 @@
 package com.milos.tickethub.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record EventResponse(
@@ -7,6 +8,8 @@ public record EventResponse(
         String title,
         String description,
         String location,
-        LocalDateTime dateTime
+        LocalDateTime dateTime,
+        BigDecimal price,
+        Integer availableTickets
 ) {
 }

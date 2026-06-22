@@ -11,7 +11,9 @@ public class EventMapper {
                 event.getTitle(),
                 event.getDescription(),
                 event.getLocation(),
-                event.getDateTime()
+                event.getDateTime(),
+                event.getPrice(),
+                event.getCapacity() - event.getSoldTickets()
         );
     }
     public static Event toEntity(EventRequest request){
@@ -20,6 +22,9 @@ public class EventMapper {
                 .description(request.description())
                 .location(request.location())
                 .dateTime(request.dateTime())
+                .price(request.price())
+                .capacity(request.capacity())
+                .soldTickets(0)
                 .build();
     }
 }

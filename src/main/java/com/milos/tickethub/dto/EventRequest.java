@@ -1,8 +1,10 @@
 package com.milos.tickethub.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record EventRequest(
@@ -13,6 +15,10 @@ public record EventRequest(
         @NotBlank
         String location,
         @NotNull
-        LocalDateTime dateTime
+        LocalDateTime dateTime,
+        @NotNull
+        BigDecimal price,
+        @Min(1)
+        Integer capacity
 ) {
 }

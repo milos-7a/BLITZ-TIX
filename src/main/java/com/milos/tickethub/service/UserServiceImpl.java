@@ -10,7 +10,6 @@ import com.milos.tickethub.mapper.UserMapper;
 import com.milos.tickethub.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,9 +70,7 @@ public class UserServiceImpl implements UserService {
 
     //Helper methods
     private User getUserFromAuth(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        assert authentication != null;
-        String email = authentication.getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
     private void checkUserUpdates(User user, UpdateUserRequest request){
