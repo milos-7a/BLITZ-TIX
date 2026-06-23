@@ -1,7 +1,9 @@
 package com.milos.tickethub.controller;
 
+import com.milos.tickethub.dto.CancelTicketRequest;
 import com.milos.tickethub.dto.TicketResponse;
 import com.milos.tickethub.service.TicketService;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +32,11 @@ public class TicketController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<TicketResponse> getAllTickets(){
         return ticketService.getAllTickets();
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public TicketResponse cancelTicket(@Valid @RequestBody CancelTicketRequest request){
+        return ticketService.cancelTicket(request);
     }
 }

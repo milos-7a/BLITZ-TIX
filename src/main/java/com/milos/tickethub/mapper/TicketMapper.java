@@ -18,12 +18,12 @@ public class TicketMapper {
                 ticket.getPrice()
         );
     }
-    public static Ticket toEntity(User user, Event event) {
+    public static Ticket toEntity(User user, Event event, TicketStatus ticketStatus) {
         return Ticket.builder()
                 .user(user)
                 .event(event)
                 .purchaseDate(LocalDateTime.now())
-                .status(TicketStatus.PURCHASED)
+                .status(ticketStatus)
                 .price(event.getPrice())
                 .build();
     }

@@ -1,10 +1,13 @@
 package com.milos.tickethub.service;
 
+import com.milos.tickethub.dto.CancelTicketRequest;
 import com.milos.tickethub.dto.TicketResponse;
 import com.milos.tickethub.entity.Event;
 import com.milos.tickethub.entity.Ticket;
+import com.milos.tickethub.entity.TicketStatus;
 import com.milos.tickethub.entity.User;
 import com.milos.tickethub.exception.EventNotFoundException;
+import com.milos.tickethub.exception.TicketNotFoundException;
 import com.milos.tickethub.exception.UserNotFoundException;
 import com.milos.tickethub.mapper.TicketMapper;
 import com.milos.tickethub.repository.EventRepository;
@@ -37,10 +40,22 @@ public class TicketServiceImpl implements TicketService {
 
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException(eventId));
 
-        Ticket ticket = TicketMapper.toEntity(user, event);
+        Ticket ticket = TicketMapper.toEntity(user, event, TicketStatus.PURCHASED);
         Ticket saved = ticketRepository.save(ticket);
 
         return TicketMapper.toResponse(saved);
+    }
+    @Override
+    @Transactional
+    public TicketResponse cancelTicket(CancelTicketRequest request){
+        Ticket ticket = ticketRepository.findById(request.ticketId()).orElseThrow(() -> new TicketNotFoundException(request.ticketId()));
+        if (ticket.getStatus() == TicketStatus.CANCELLED) {
+            throw new IllegalStateException("Ticket is already cancelled");
+        }
+        ticket.setStatus(TicketStatus.CANCELLED);
+        Event event = ticket.getEvent();
+        eventRepository.decrementSoldTickets(event.getId());
+        return TicketMapper.toResponse(ticket);
     }
     @Override
     public List<TicketResponse> getMyTickets(){
@@ -53,7 +68,6 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> tickets = ticketRepository.findAll();
         return tickets.stream().map(TicketMapper::toResponse).toList();
     }
-
 
     private User getUserFromAuth(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
