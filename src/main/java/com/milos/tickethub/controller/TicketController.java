@@ -4,6 +4,7 @@ import com.milos.tickethub.dto.CancelTicketRequest;
 import com.milos.tickethub.dto.TicketResponse;
 import com.milos.tickethub.service.TicketService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,12 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tickets")
+@AllArgsConstructor
 public class TicketController {
     private final TicketService ticketService;
-
-    public TicketController(TicketService ticketService) {
-        this.ticketService = ticketService;
-    }
 
     @PostMapping("/purchase/{eventId}")
     public TicketResponse purchaseTicket(@PathVariable Long eventId){

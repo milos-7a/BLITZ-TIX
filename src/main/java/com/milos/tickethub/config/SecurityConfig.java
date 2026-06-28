@@ -1,7 +1,9 @@
 package com.milos.tickethub.config;
 
+import com.milos.tickethub.security.CustomAccessDeniedHandler;
 import com.milos.tickethub.security.JwtAuthEntryPoint;
 import com.milos.tickethub.security.JwtAuthenticationFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,15 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthEntryPoint unauthorizedHandler;
-
-    // 2. Use clean constructor injection for all your dependencies
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtAuthEntryPoint unauthorizedHandler) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -46,8 +44,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF
                 .cors(AbstractHttpConfigurer::disable) // Disable CORS (or configure if needed)
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.authenticationEntryPoint(unauthorizedHandler)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                                .authenticationEntryPoint(unauthorizedHandler)
+                                .accessDeniedHandler(accessDeniedHandler)
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -60,7 +59,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 );
-        // Add the JWT Token filter before the UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
