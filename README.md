@@ -79,6 +79,16 @@ PROJECT HIGHLIGHTS
 
 ------------------------------------------------------------
 
+POSTMAN COLLECTION
+------------------------------------------------------------
+A Postman collection is included in the repository under:
+
+- docs/postman/BLITZTIX.postman_collection.json
+
+It contains all API endpoints with preconfigured authentication flow.
+
+------------------------------------------------------------
+
 FUTURE IMPROVEMENTS
 ------------------------------------------------------------
 
