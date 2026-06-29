@@ -1,9 +1,7 @@
 package com.milos.blitztix.controller;
 
-import com.milos.blitztix.dto.ChangeRoleRequest;
-import com.milos.blitztix.dto.PasswordChangeRequest;
-import com.milos.blitztix.dto.UpdateUserRequest;
-import com.milos.blitztix.dto.UserResponse;
+import com.milos.blitztix.dto.*;
+import com.milos.blitztix.service.TicketService;
 import com.milos.blitztix.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final TicketService ticketService;
     @GetMapping("/me")
     public UserResponse getMe(){
         return userService.getCurrentUser();
@@ -44,6 +43,11 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse changeUserRole(@PathVariable Long id, @Valid @RequestBody ChangeRoleRequest request){
         return userService.changeUserRole(id, request);
+    }
+    @GetMapping("/{id}/tickets")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<TicketResponse> getByUsersId(@Valid @PathVariable Long id){
+        return ticketService.getTicketsFromUser(id);
     }
 
 }

@@ -10,6 +10,7 @@ public record EventResponse(
         String location,
         LocalDateTime dateTime,
         BigDecimal price,
-        Integer availableTickets
+        Integer availableTickets,
+        String imageUrl
 ) {
 }

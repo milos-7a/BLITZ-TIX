@@ -1,6 +1,7 @@
 package com.milos.blitztix.service;
 
 import com.milos.blitztix.dto.EventResponse;
+import com.milos.blitztix.dto.EventUpdateRequest;
 import com.milos.blitztix.entity.Event;
 import com.milos.blitztix.exception.EventNotFoundException;
 import com.milos.blitztix.mapper.EventMapper;
@@ -37,9 +38,11 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Event updateEvent(Long id, Event event){
-        event.setId(id);
-        return eventRepository.save(event);
+    public EventResponse updateEvent(Long id, EventUpdateRequest request){
+        Event event = eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+        checkEventUpdates(event, request);
+        eventRepository.save(event);
+        return EventMapper.toResponse(event);
     }
 
     @Override
@@ -59,5 +62,29 @@ public class EventServiceImpl implements EventService{
         }
         eventRepository.deleteById(id);
         return "Event deleted successfully";
+    }
+
+    private void checkEventUpdates(Event event, EventUpdateRequest request){
+        if (request.description() != null && !request.description().isBlank()){
+            event.setDescription(request.description());
+        }
+        if (request.dateTime() != null){
+            event.setDateTime(request.dateTime());
+        }
+        if (request.location() != null && !request.location().isBlank()){
+            event.setLocation(request.location());
+        }
+        if (request.capacity() != null){
+            event.setCapacity(event.getCapacity() + request.capacity());
+        }
+        if (request.price()!= null){
+            event.setPrice(request.price());
+        }
+        if (request.title() != null && !request.title().isBlank()){
+            event.setTitle(request.title());
+        }
+        if (request.imageUrl() != null && !request.imageUrl().isBlank()){
+            event.setImageUrl(request.imageUrl());
+        }
     }
 }

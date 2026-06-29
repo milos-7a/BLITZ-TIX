@@ -13,7 +13,8 @@ public class EventMapper {
                 event.getLocation(),
                 event.getDateTime(),
                 event.getPrice(),
-                event.getCapacity() - event.getSoldTickets()
+                event.getCapacity() - event.getSoldTickets(),
+                event.getImageUrl()
         );
     }
     public static Event toEntity(EventRequest request){
@@ -24,7 +25,7 @@ public class EventMapper {
                 .dateTime(request.dateTime())
                 .price(request.price())
                 .capacity(request.capacity())
-                .soldTickets(0)
+                .imageUrl(request.imageUrl())
                 .build();
     }
 }

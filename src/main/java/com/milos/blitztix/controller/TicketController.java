@@ -37,4 +37,5 @@ public class TicketController {
     public TicketResponse cancelTicket(@Valid @RequestBody CancelTicketRequest request){
         return ticketService.cancelTicket(request);
     }
+
 }

@@ -25,5 +25,6 @@ public class Event {
     private BigDecimal price;
     private Integer capacity;
     private Integer soldTickets;
+    private String imageUrl;
 
 }

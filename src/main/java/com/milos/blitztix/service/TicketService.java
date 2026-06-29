@@ -10,4 +10,6 @@ public interface TicketService {
     List<TicketResponse> getMyTickets();
     List<TicketResponse> getAllTickets();
     TicketResponse cancelTicket(CancelTicketRequest request);
+    List<TicketResponse> getTicketsFromUser(Long id);
 }
+

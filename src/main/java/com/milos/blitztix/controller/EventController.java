@@ -2,6 +2,7 @@ package com.milos.blitztix.controller;
 
 import com.milos.blitztix.dto.EventRequest;
 import com.milos.blitztix.dto.EventResponse;
+import com.milos.blitztix.dto.EventUpdateRequest;
 import com.milos.blitztix.entity.Event;
 import com.milos.blitztix.mapper.EventMapper;
 import com.milos.blitztix.service.EventService;
@@ -45,10 +46,8 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public EventResponse updateEvent(@PathVariable Long id, @Valid @RequestBody EventRequest request){
-        Event event = EventMapper.toEntity(request);
-        Event saved = eventService.updateEvent(id, event);
-        return EventMapper.toResponse(saved);
+    public EventResponse updateEvent(@PathVariable Long id, @Valid @RequestBody EventUpdateRequest request){
+        return eventService.updateEvent(id, request);
     }
 
     @DeleteMapping("/{id}")

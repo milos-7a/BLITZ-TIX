@@ -6,6 +6,7 @@ import com.milos.blitztix.entity.Event;
 import com.milos.blitztix.entity.Ticket;
 import com.milos.blitztix.entity.TicketStatus;
 import com.milos.blitztix.entity.User;
+import com.milos.blitztix.exception.EventIsSoldOutException;
 import com.milos.blitztix.exception.EventNotFoundException;
 import com.milos.blitztix.exception.TicketNotFoundException;
 import com.milos.blitztix.exception.UserNotFoundException;
@@ -34,8 +35,8 @@ public class TicketServiceImpl implements TicketService {
 
         int updatedRows = eventRepository.incrementSoldTickets(eventId);
 
-        if (updatedRows == 0){
-            throw new RuntimeException("Event is sold out");
+        if (updatedRows <= 0){
+            throw new EventIsSoldOutException(eventId);
         }
 
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException(eventId));
@@ -66,6 +67,13 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<TicketResponse> getAllTickets(){
         List<Ticket> tickets = ticketRepository.findAll();
+        return tickets.stream().map(TicketMapper::toResponse).toList();
+    }
+
+    @Override
+    public List<TicketResponse> getTicketsFromUser(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        List<Ticket> tickets = ticketRepository.findByUser(user);
         return tickets.stream().map(TicketMapper::toResponse).toList();
     }
 
