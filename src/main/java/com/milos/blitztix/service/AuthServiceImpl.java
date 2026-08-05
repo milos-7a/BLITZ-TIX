@@ -1,11 +1,13 @@
 package com.milos.blitztix.service;
 
 import com.milos.blitztix.dto.LoginRequest;
+import com.milos.blitztix.dto.LoginResponse;
 import com.milos.blitztix.dto.RegisterRequest;
 import com.milos.blitztix.dto.UserResponse;
 import com.milos.blitztix.entity.Role;
 import com.milos.blitztix.entity.User;
 import com.milos.blitztix.exception.EmailAlreadyExistsException;
+import com.milos.blitztix.exception.UserNotFoundException;
 import com.milos.blitztix.mapper.UserMapper;
 import com.milos.blitztix.repository.UserRepository;
 import com.milos.blitztix.security.JwtUtil;
@@ -40,12 +42,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String loginUser(LoginRequest request){
+    public LoginResponse loginUser(LoginRequest request){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        assert user != null;
-        return jwtUtil.generateToken(user.getUsername());
+        User findUser = userRepository.findByEmail(request.email()).orElseThrow(() -> new UserNotFoundException(request.email()));
+        String token =  jwtUtil.generateToken(user.getUsername());
+
+        return new LoginResponse(token, UserMapper.toResponse(findUser));
     }
 }

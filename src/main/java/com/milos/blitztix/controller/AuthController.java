@@ -1,6 +1,7 @@
 package com.milos.blitztix.controller;
 
 import com.milos.blitztix.dto.LoginRequest;
+import com.milos.blitztix.dto.LoginResponse;
 import com.milos.blitztix.dto.RegisterRequest;
 import com.milos.blitztix.dto.UserResponse;
 import com.milos.blitztix.service.AuthService;
@@ -19,7 +20,7 @@ public class AuthController {
         return authService.registerUser(request);
     }
     @PostMapping("/login")
-    public String loginUser(@Valid @RequestBody LoginRequest request) {
+    public LoginResponse loginUser(@Valid @RequestBody LoginRequest request) {
         return authService.loginUser(request);
     }
 }

@@ -53,7 +53,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/auth/**", "/api/test/all").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+
                                 .requestMatchers(HttpMethod.POST, "/api/events/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/events/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
